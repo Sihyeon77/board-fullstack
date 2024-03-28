@@ -1,6 +1,6 @@
 export default interface CommentListItem{
     nickname:string;
     profileImage:string|null;
-    writtenDateTiem:string;
+    writtenDateTime:string;
     content:string;
 }

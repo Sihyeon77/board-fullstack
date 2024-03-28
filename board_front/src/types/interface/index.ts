@@ -5,5 +5,5 @@ import FavoriteListItem from './favorite_list_item.interface';
 export type{
     BoardListItem,
     CommentListItem,
-    FavoriteListItem,
+    FavoriteListItem
 }
