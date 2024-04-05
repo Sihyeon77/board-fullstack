@@ -39,25 +39,23 @@ function App() {
            path={SEARCH_PATH(":searchWord")}
            element={<Search></Search>}
          ></Route>
-         <Route path={USER_PATH(":userEmail")} element={<User></User>}></Route>
+         <Route path={USER_PATH(':userEmail')} element={<User></User>}></Route>
          <Route path={BOARD_PATH()}>
-
            <Route
              path={BOARD_WRITE_PATH()}
              element={<WriteBoard></WriteBoard>}
            ></Route>
            <Route
-             path={BOARD_UPDATE_PATH(':boardNumber')}
+             path={BOARD_UPDATE_PATH(":boardNumber")}
              element={<UpdateBoard></UpdateBoard>}
            ></Route>
            <Route
-             path={BOARD_DETAIL_PATH(':boardNumber')}
-
+             path={BOARD_DETAIL_PATH(":boardNumber")}
              element={<DetailBoard></DetailBoard>}
            ></Route>
          </Route>
+         <Route path="*" element={<h1>404 Not Found</h1>}></Route>
        </Route>
-       <Route path='*' element={<h1>404 Not Found</h1>}></Route>
      </Routes>
    );
 }

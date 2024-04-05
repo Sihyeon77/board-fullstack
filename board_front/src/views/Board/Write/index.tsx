@@ -7,6 +7,6 @@ export default function WriteBoard() {
 
 //  render: 게시물 작성화면 렌더
   return (
-    <div>index</div>
+    <div>게시물 작성화면</div>
   )
 }

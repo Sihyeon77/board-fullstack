@@ -8,6 +8,6 @@ export default function Authentication() {
 
 //  render: 인증화면 컴ㅍ넌트 render
   return (
-    <div>index</div>
+    <div>인증화면 </div>
   )
 }

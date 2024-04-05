@@ -10,6 +10,6 @@ export default function UpdateBoard() {
 
 //   render: 게시물 수정 렌더
   return (
-    <div>index</div>
+    <div>게시물 수정화면</div>
   )
 }

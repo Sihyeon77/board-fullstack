@@ -6,6 +6,6 @@ export default function User() {
 
 //  render: 유저 화면 렌더
   return (
-    <div>index</div>
+    <div>유저 화면</div>
   )
 }

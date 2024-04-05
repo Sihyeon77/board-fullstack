@@ -7,6 +7,6 @@ export default function Main() {
 
 //  render: 메인화면 렌더
   return (
-    <div>index</div>
+    <div>메인화면</div>
   )
 }

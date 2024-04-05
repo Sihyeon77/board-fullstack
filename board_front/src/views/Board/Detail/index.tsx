@@ -7,6 +7,6 @@ export default function DetailBoard() {
 
   //  render: 게시물 상세화면 render
   return (
-    <div>index</div>
+    <div>게시물 상세화면</div>
   )
 }
