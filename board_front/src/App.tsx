@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import './App.css';
 import { Route, Routes } from 'react-router-dom';
 import Main from 'views/Main';
@@ -7,9 +7,15 @@ import DetailBoard from 'views/Board/Detail';
 import UpdateBoard from 'views/Board/Update';
 import WriteBoard from 'views/Board/Write';
 import Search from 'views/Search';
-import User from 'views/User';
+import UserPage from 'views/User';
 import Container from 'layouts/Container';
 import { AUTH_PATH, BOARD_DETAIL_PATH, BOARD_PATH, BOARD_UPDATE_PATH, BOARD_WRITE_PATH, MAIN_PATH, SEARCH_PATH, USER_PATH } from 'constant';
+import { useCookies } from 'react-cookie';
+import { useLoginUserStore } from 'stores';
+import { getSignInUserRequest } from 'apis';
+import { GetSignInUserResponseDto } from 'apis/response/user';
+import { ResponseDto } from 'apis/response';
+import { User } from 'types/interface';
 
 
 
@@ -18,6 +24,29 @@ import { AUTH_PATH, BOARD_DETAIL_PATH, BOARD_PATH, BOARD_UPDATE_PATH, BOARD_WRIT
 
 
 function App() {
+  // state: 로그인 유저 전역 상태
+  const {setLoginUser, resetLoginUser} = useLoginUserStore();
+  // state: cookie 상태
+  const [cookies, setCookies] = useCookies();
+  //  function: get sign in user response 처리 함수 
+  const getSignInUserResponse = (responseBody:GetSignInUserResponseDto|ResponseDto| null) =>{
+    if(!responseBody)return;
+    const {code}=responseBody;
+    if(code==='AF'||code==='NU'||code==='DBE'){
+      resetLoginUser();
+      return;
+    }
+    const loginUser : User = {...responseBody as GetSignInUserResponseDto};
+    setLoginUser(loginUser);
+  }
+  //  effect: accessToken cookie 값이 변경될 때 마다 실행될 함수
+  useEffect(()=>{
+    if(!cookies.accessToken){
+      resetLoginUser();
+      return;
+    }
+    getSignInUserRequest(cookies.accessToken).then(getSignInUserResponse);
+  },[cookies.accessToken])
   //  description: 메인화면 : '/' - ㅡMain
   //   description: 로그인 _ 회원가입 : '/auth' -Autherntication
   //  description: 검색화면 : '/search/:searchWord' -search
@@ -39,7 +68,7 @@ function App() {
            path={SEARCH_PATH(":searchWord")}
            element={<Search></Search>}
          ></Route>
-         <Route path={USER_PATH(':userEmail')} element={<User></User>}></Route>
+         <Route path={USER_PATH(':userEmail')} element={<UserPage></UserPage>}></Route>
          <Route path={BOARD_PATH()}>
            <Route
              path={BOARD_WRITE_PATH()}

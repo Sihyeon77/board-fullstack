@@ -70,7 +70,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter{
         }
         
         boolean isBearer = authorization.startsWith("Bearer ");
-        if (isBearer) {
+        if (!isBearer) {
             return null;
         }
         String token = authorization.substring(7);

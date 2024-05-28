@@ -1,6 +1,6 @@
 package com.myboard.board_back.common;
 
-public interface ResposeMessage {
+public interface ResponseMessage {
     // HTTP Status 200
     String SUCCESS = "Success";    
 

@@ -11,6 +11,7 @@ import { AUTH_PATH, BOARD_DETAIL_PATH, BOARD_UPDATE_PATH, BOARD_WRITE_PATH, MAIN
 import { useCookies } from "react-cookie";
 import { useBoardStore, useLoginUserStore } from "stores";
 import { log } from "console";
+import { BOARD_PATH } from '../../constant/index';
 
 //  component: 헤더 레이아웃
 export default function Header() {
@@ -22,27 +23,20 @@ export default function Header() {
   const { pathname } = useLocation();
   // state: 로그인 상태
   const [isLogin, setLogin] = useState<boolean>(false);
+  // state: 인증 페이지 상태
   const isAuthPage = pathname.startsWith(AUTH_PATH());
+  // state: 메인페이지 상태
   const isMainPage = pathname===MAIN_PATH();
+  // state: 검색 페이지 상태
   const isSearchPage = pathname.startsWith(SEARCH_PATH(""));
-  const isBoardDetailPage = pathname.startsWith(BOARD_DETAIL_PATH(""));
-  const isBoardWritePage = pathname.startsWith(BOARD_WRITE_PATH());
-  const isBoardUpdatePage = pathname.startsWith(BOARD_UPDATE_PATH(""));
+  // state: 게시물 상세 페이지 상태
+  const isBoardDetailPage = pathname.startsWith(BOARD_PATH()+'/'+ BOARD_DETAIL_PATH(""));
+  // state: 게시물 작성 페이지 상태
+  const isBoardWritePage = pathname.startsWith(BOARD_PATH()+'/'+ BOARD_WRITE_PATH());
+  // state: 게시물 업로드 페이지 상태
+  const isBoardUpdatePage = pathname.startsWith(BOARD_PATH()+'/'+ BOARD_UPDATE_PATH(""));
+  // state: 유저 페이지 상태
   const isUserPage = pathname.startsWith(USER_PATH(""));
-  // // state: 인증 페이지 상태
-  // const [isAuthPage, setAuthPage] = useState<boolean>(false);
-  // // state: 메인 페이지 상태
-  // const [isMainPage, setMainPaget] = useState<boolean>(false);
-  // // state: 검색 페이지 상태
-  // const [isSearchPage, setSearchPage] = useState<boolean>(false);
-  // // state: 게시물 상세 페이지 상태
-  // const [isBoardDetailPage, setBoardDetailPage] = useState<boolean>(false);
-  // // state: 게시물 작성 페이지 상태
-  // const [isBoardWritePage, setBoardWritePage] = useState<boolean>(false);
-  // // state: 게시물 수정 페이지 상태
-  // const [isBoardUpdatePage, setBoardUpdatePage] = useState<boolean>(false);
-  // // state: 유저 페이지 상태
-  // const [isUserPage, setUserPage] = useState<boolean>(false);
 
   // function: 네비게이트 함수
   const navigator = useNavigate();
@@ -100,6 +94,10 @@ export default function Header() {
         return;
       }
     }, [searchWord]);
+    // effect: login user가 변경될 때 마다 실행될 함수
+    useEffect(()=>{
+      setLogin(loginUser!==null);
+    },[loginUser])
 
     if (!status) {
       // render: 검색렌더 (클릭 false상태)
@@ -151,6 +149,7 @@ export default function Header() {
     // event handler: 로그아웃 버튼 클릭 이벤트 처리 함수
     const onSignoutButtonClickHandler = () => {
       resetLoginUser();
+      setCookies('accessToken', '', {path:MAIN_PATH(), expires:new Date()});
       navigator(MAIN_PATH());
     };
 
@@ -192,26 +191,6 @@ export default function Header() {
     // render: 업로드 불가 버튼 컴포넌트 렌더
     return <div className="disable-button">{"업로드"}</div>;
   };
-
-  // effect: path가 변경될 때 마다 실행될 함수
-  // useEffect(() => {
-  //   const isAuthPage = pathname.startsWith(AUTH_PATH());
-  //   const isMainPage = pathname===MAIN_PATH();
-  //   const isSearchPage = pathname.startsWith(SEARCH_PATH(""));
-  //   const isBoardDetailPage = pathname.startsWith(BOARD_DETAIL_PATH(""));
-  //   const isBoardWritePage = pathname.startsWith(BOARD_WRITE_PATH());
-  //   const isBoardUpdatePage = pathname.startsWith(BOARD_UPDATE_PATH(""));
-  //   const isUserPage = pathname.startsWith(USER_PATH(""));
-  //   setAuthPage(isAuthPage)
-  //   setMainPaget(isMainPage)
-  //   setSearchPage(isSearchPage)
-  //   setBoardDetailPage(isBoardDetailPage)
-  //   setBoardWritePage(isBoardWritePage)
-  //   setBoardUpdatePage(isBoardUpdatePage)
-  //   setUserPage(isUserPage)
-  //   console.log(BOARD_WRITE_PATH());
-
-  // }, [pathname]);
 
   // render: 헤더 레이아웃 렌더
   return (
