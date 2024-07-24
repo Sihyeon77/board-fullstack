@@ -24,7 +24,6 @@ public class UserEntity {
     private String address;
     @Column(name = "address_detail")
     private String addressDetail;
-    @Column(name = "profile_img")
     private String profileImage;
     private boolean agreedPersonal;
 

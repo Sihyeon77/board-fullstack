@@ -44,7 +44,6 @@ public class FileServiceImplement implements FileService{
         try {
             file.transferTo(new File(savePath));
         } catch (Exception e) {
-            // TODO: handle exception
             e.printStackTrace();
             return null;
         }

@@ -8,7 +8,12 @@ import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import java.time.*;
+
+import com.myboard.board_back.dto.request.board.PostCommentRequestDto;
+
+import java.util.Date;
+import java.time.Instant;
+import java.text.SimpleDateFormat;
 
 @Getter
 @NoArgsConstructor
@@ -17,11 +22,22 @@ import java.time.*;
 @Table(name = "comment")
 public class CommentEntity {
     @Id
-    @GeneratedValue(strategy =GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int commentNumber;
     private String content;
-    private LocalDate writtenDateTime;
+    private String writtenDateTime;
     private String userEmail;
-    private String commentContent;
-    private int boardId;
+    private int id;
+
+    public CommentEntity(PostCommentRequestDto dto, Integer id, String email) {
+        
+        Date now = Date.from(Instant.now());
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        String writtenDateTime = simpleDateFormat.format(now);
+
+        this.content = dto.getContent();
+        this.writtenDateTime = writtenDateTime;
+        this.userEmail = email;
+        this.id = id;
+    }
 }

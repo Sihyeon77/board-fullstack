@@ -1,6 +1,9 @@
 import React, { ChangeEvent, useEffect, useRef, useState } from 'react'
 import './style.css'
-import { useBoardStore } from 'stores';
+import { useBoardStore, useLoginUserStore } from 'stores';
+import { useNavigate } from 'react-router-dom';
+import { MAIN_PATH } from 'constant';
+import { useCookies } from 'react-cookie';
 
 
 //  component: 게시물 작성화면 컴포넌트
@@ -18,8 +21,16 @@ const {content, setContent} = useBoardStore();
 const {boardImageFileList, setBoardImageFileList} = useBoardStore();
 const {resetBoard} = useBoardStore();
 
+// state: 로그인 유저 상태
+const {loginUser} = useLoginUserStore();
+
+// state: 쿠키 상태
+const [cookies, setCookies] = useCookies();
 // state: 게시물 이미지 미리보기 URL 상태
 const [imageUrls, setImageUrls] = useState<string[]>([]);
+
+// function: 네비게이트 함수
+const navigator = useNavigate();
 
 // event handler: 제목 변경 이벤트 처리
 const onTitleChangeHandler = (event: ChangeEvent<HTMLTextAreaElement>) =>{
@@ -39,16 +50,16 @@ const onContentChangeHandler = (event:ChangeEvent<HTMLTextAreaElement>)=>{
 }
 // event handler: 이미지 변경 이벤트 처리
 const onImageChangeHandler = (event: ChangeEvent<HTMLInputElement>)=>{
-  if(!event.target.files || !event.target.files.length) return;
-  const file = event.target.files[0];
+  const files = event.target.files;
+  if(!files || !files.length) return;
+
+  const file = files[0];
   const imageUrl = URL.createObjectURL(file);
-  const newImageUrls = imageUrls.map(item => item);
-  newImageUrls.push(imageUrl);
+
+  const newImageUrls = [...imageUrls, imageUrl];
   setImageUrls(newImageUrls);
 
-  const newBoardImageFileList = boardImageFileList ? boardImageFileList.map(item=>item):[];
-  if(!newBoardImageFileList) return;
-  newBoardImageFileList.push(file);
+  const newBoardImageFileList = boardImageFileList ? [...boardImageFileList, file]:[file];
   setBoardImageFileList(newBoardImageFileList);
 }
 
@@ -57,8 +68,30 @@ const onImageUploadButtonClickHandler = () =>{
   if (!imageInputRef.current) return;
   imageInputRef.current.click();
 }
+// event handler: 이미지 닫기 버튼 클릭 이벤트 처리
+const onImageCloseButtonClickHandler = (deleteIndex: number) =>{
+  if(imageInputRef.current){
+    imageInputRef.current.value='';
+  }
+  
+  const newImageUrls = imageUrls.filter((url, index)=>index !== deleteIndex);
+  setImageUrls(newImageUrls);
+
+  const newBoardImageFileList = boardImageFileList ? boardImageFileList.filter((file, index)=>index!==deleteIndex) : [];
+  setBoardImageFileList(newBoardImageFileList);
+
+  if(!imageInputRef.current)return;
+  imageInputRef.current.value= '';
+}
+
 // effect: 마운트 시 실행될 함수
 useEffect(()=>{
+  const accessToken  = cookies.accessToken;
+  if(!accessToken){
+    alert('로그인이 필요한 서비스입니다.');
+    navigator(MAIN_PATH());
+    return
+  }
   resetBoard();
 },[]);
 //  render: 게시물 작성화면 렌더
@@ -75,16 +108,18 @@ useEffect(()=>{
             <div className='icon-button' onClick={onImageUploadButtonClickHandler}>
               <div className='icon image-box-light-icon'></div>
             </div>
-            <input ref={imageInputRef} type="file" accept='image/*' style={{display:'none'}}/>
+            <input ref={imageInputRef} type="file" accept='image/*' style={{display:'none'}} onChange={onImageChangeHandler}/>
           </div>
-          <div className='board-write-images-box'>
+          {imageUrls.map((imageUrl, index)=>
+            <div className='board-write-images-box'>
             <div className='board-write-image-box'>
-              <img src='https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQgvU9R9wEQ-rL35R3J_XZGJUDzezpR1ESf5f9GiLPiNw&s' alt="" className='board-write-image' />
-              <div className='icon-button image-close'>
+              <img src={imageUrl} alt="" className='board-write-image' />
+              <div className='icon-button image-close' onClick={() => onImageCloseButtonClickHandler(index)}>
                 <div className='icon close-icon'></div>
               </div>
             </div>
           </div>
+          )}
         </div>
       </div>
     </div>

@@ -28,7 +28,6 @@ public class AuthController {
     @PostMapping("/sign-up")
     public ResponseEntity<? super SignUpResponseDto> signUp(
         @RequestBody @Valid SignUpRequestDto requestBody) {
-        //TODO: process POST request
         
         ResponseEntity<? super SignUpResponseDto> response = authService.signUp(requestBody);
         return response;
@@ -37,7 +36,7 @@ public class AuthController {
     @PostMapping("/sign-in")
     public ResponseEntity<? super SignInResponseDto> signIn(
         @RequestBody @Valid SignInRequestDto requestBody) {
-        //TODO: process POST request
+            
         ResponseEntity<? super SignInResponseDto> response = authService.signIn(requestBody);
         return response;
     }

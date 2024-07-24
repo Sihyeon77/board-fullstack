@@ -1,5 +1,7 @@
 package com.myboard.board_back.service.implement;
 
+import java.util.Optional;
+
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -27,7 +29,6 @@ public class AuthServiceImplement implements AuthService{
 
     @Override
     public ResponseEntity<? super SignUpResponseDto> signUp(SignUpRequestDto dto) {
-        // TODO Auto-generated method stub\
         try {
             String email = dto.getEmail();
             String nickname = dto.getNickname();
@@ -54,7 +55,6 @@ public class AuthServiceImplement implements AuthService{
             userRepository.save(userEntity);
 
         } catch (Exception e) {
-            // TODO: handle exception
             e.printStackTrace();
             return ResponseDto.databaseError();
         }
@@ -62,16 +62,16 @@ public class AuthServiceImplement implements AuthService{
     }
 
     public ResponseEntity<? super SignInResponseDto> signIn(SignInRequestDto dto) {
-        // TODO Auto-generated method stub
         String token = null;
 
         try {
             String email = dto.getEmail();
-            UserEntity userEntity = userRepository.findByEmail(email);
-            if (userEntity == null){
-                // log.trace("userEntity is null.");
+            Optional<UserEntity> userOptional = userRepository.findByEmail(email);
+            if (!userOptional.isPresent()){
                 return SignInResponseDto.signInFail();
             }
+            UserEntity userEntity = userOptional.get();
+            
 
             String password = dto.getPassword();
             String encodedPassword = userEntity.getPassword();
@@ -83,7 +83,6 @@ public class AuthServiceImplement implements AuthService{
             
             return SignInResponseDto.success(token);
         } catch (Exception e) {
-            // TODO: handle exception
             e.printStackTrace();
             return ResponseDto.databaseError();
         }

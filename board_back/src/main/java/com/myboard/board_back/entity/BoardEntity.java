@@ -10,7 +10,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import java.text.SimpleDateFormat;
-import java.time.*;
+import java.time.Instant;
 import java.util.Date;
 
 import com.myboard.board_back.dto.request.board.PostBoardRequestDto;
@@ -21,8 +21,7 @@ import com.myboard.board_back.dto.request.board.PostBoardRequestDto;
 @Entity(name = "board")
 @Table(name = "board")
 public class BoardEntity {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
     private String writerEmail;
     private String title;
@@ -44,5 +43,20 @@ public class BoardEntity {
         this.commentCount = 0;
         this.favoriteCount = 0;
         this.viewCount = 0;
+    }
+    public void increaseViewCount(){
+        this.viewCount++;
+    }
+    public void increaseFavoriteCount(){
+        this.favoriteCount++;
+    }
+    public void decreaseFavoriteCount(){
+        this.favoriteCount--;
+    }
+    public void increaseCommentCount(){
+        this.commentCount++;
+    }
+    public void decreaseCommentCount(){
+        this.commentCount--;
     }
 }

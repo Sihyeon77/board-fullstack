@@ -3,6 +3,10 @@
     width: 100%;
 }
 
+.emphasis{
+    font-weight: bolder;
+}
+
 .icon-button {
     border-radius: 50% 50%;
     
@@ -108,6 +112,14 @@
     align-items: center;
     justify-content: center;
 }
+.icon-box-small{
+    width: 16px;
+    height: 16px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
 
 .icon{
     width: 100%;
@@ -154,4 +166,28 @@
 }
 .close-icon{
     background-image: url(assets/image/close.png);
+}
+.more-icon{
+    background-image: url(assets/image/more.png);
+}
+.favorite-fill-icon{
+    background-image: url(assets/image/favorite-fill.png);
+}
+.favorite-light-icon{
+    background-image: url(assets/image/favorite-light.png);
+}
+.up-light-icon{
+    background-image: url(assets/image/expand-up-light.png);
+}
+.down-light-icon{
+    background-image: url(assets/image/expand-down-light.png);
+}
+.comment-icon{
+    background-image: url(assets/image/chat-light.png);
+}
+.extend-left-icon{
+    background-image: url(assets/image/expand-left.png);
+}
+.extend-right-icon{
+    background-image: url(assets/image/expand-right.png);
 }
